@@ -36,7 +36,7 @@ int main(int argc, char* argv [] )
 
 }
 void display(int rows,int columns, char* simulation){
-	printf("\033[H\033\[J"); //limpa tela
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); 
 	for (int y=0;y<rows;y++){
 
 		for (int x=0;x<columns;x++){
