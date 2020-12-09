@@ -1,3 +1,12 @@
 # Game_of_life 
 
-**WARNING: This project is Unfinished and may have bug(s)!**
+---------------
+
+The game is finished. To compile use:
+gcc -Wall main.c -o prg
+./prog 
+
+---------------
+
+
+

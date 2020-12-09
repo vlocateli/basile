@@ -1,104 +1,184 @@
-//TODO REVER O VIDEO PARA ACHAR O ERRO
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-
-#include<stdlib.h>
-#include<stdio.h>
-void begin(int rows,int columns);
-char * create(int rows,int columns);
-double getRandomDoubleInRange(double min, double max);
-void display(int rows,int columns,char*simulation);
-
-
-
-
-int main(int argc, char* argv [] )
-{	
-	int rows = atoi(argv[1]);
-	if(rows <= 0 )
-	{
-		printf("Quantidade de linhas deve ser maior que zero. A quantidade lida foi de %02d\n",rows);
-		return -1;
-	
-	}
-	
-	
-	
-	int columns= atoi(argv[2]);
-	if(columns<= 0 )
-	{
-		printf("Quantidade de colunas deve ser maior que zero. A quantidade lida foi de %02d\n",columns);
-		return -1;
-	
-	}
-
-	begin(rows,columns);
-
-
-}
-void display(int rows,int columns, char* simulation){
-	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); 
-	for (int y=0;y<rows;y++){
-
-		for (int x=0;x<columns;x++){
-			printf("%c ",*(simulation+y*columns+x));
-
-
-		}
-		printf("\n");
-	}
-
-
-}
-void begin(int rows, int columns){
-	puts("Inciando programa");
-	printf("Linhas = %02d\n",rows);
-	printf("Colunas = %02d\n",columns);
-	char*simulation=create(rows,columns);
-	if(simulation==NULL)
-		return;
-	display(rows,columns,simulation);
-	
- 	
-	
-
-
-
-	}
-double getRandomDoubleInRange(double min, double max){
-
+double getRandomDoubleInRange (double min, double max)
+{
 	return ((double)rand()/RAND_MAX)* (max-min)+min;
-
-
-
 }
 
 
-char* create(int rows,int columns){
-			char* simulation =(char*) calloc(rows*columns,sizeof(char));
-			if(simulation==NULL){
-				return NULL;
-			}
-			for(int y =0; y<rows;y++){
-					for(int x=0;x<columns;x++){
-						if(getRandomDoubleInRange(0.0,1.0)<= 0.35)
-						{
-							*(simulation+y*columns+x)="#";
-						}
-						
-						else
-						{
-							*(simulation+y*columns+x)=".";
-						}
+void preenche2d (char **v, int r, int c, int chance)
+{
+	srand(time(NULL));
+	
+	int i, j, margem = 2;
+	float ch = (float)chance/100;
+  
+  	for (i = 0; i < r+margem; i++)
+  	{	
+    	for (j = 0; j < c+margem; j++) 
+    		
+    		if ((i == 0) || (j == 0))
+
+    			v[i][j] = '.';
+    		
+    		else if ((i == r+margem/2) || (j == c+margem/2))
+    		
+    			v[i][j] = '.';
+			
+      		else if (getRandomDoubleInRange(0.0,1.0) <= ch)
+	  
+	  			v[i][j] = '#';
+	  
+	  		else
+	  
+        		v[i][j] = '.';
+  	}
+  	
+}
 
 
+char **malloc2d (int r, int c)
+{
+	int i;
+	char **t = malloc(r * sizeof(char *));
+  
+	for (i = 0; i < r; i++)
+  
+		t[i] = malloc (c * sizeof(char));
+        
+	return t;
+}
 
 
-					}
+void imprime2d (char **v, int r, int c)
+{
+	int i, j;
+  
+	for (i = 1; i < r+1; i++)
+	{
+		for (j = 1; j < c+1; j++)
+    
+    		printf("%c ", v[i][j]);
+      
+    printf("\n");
+  	}
+  
+ 	printf("\n\n");
+}
 
 
-
-
-			}	
+char **begin (int rows, int columns)
+{
+	int margem = 2;
+	
+	char **simulation = malloc2d(rows+margem,columns+margem);
+		
 	return simulation;
-
 }
+
+char **step (char **v, int r, int c)
+{
+	int i, j, k, l, count;
+	int margem = 2;
+	char **novo_jogo = begin(r, c);
+	preenche2d (novo_jogo, r, c, 0);
+	
+	for (i = 0+margem/2; i < r+margem/2; i++)
+	{
+		for (j = 0+margem/2; j < c+margem/2; j++)
+		{	
+			count = 0;
+			
+			for (k = -1; k < 2; k++)
+			{
+				for (l = -1; l < 2; l++)
+				{
+					if (v[i+k][j+l] == '#')
+					{
+						if ((k != 0) || (l != 0))
+						
+							count++;
+					}
+				}
+			}
+			
+			if (v[i][j] == '.' && count == 3)
+			
+				novo_jogo[i][j] = '#';
+			
+			
+			else if (v[i][j] == '#')
+			{
+				if (count <= 1 || count >= 4)
+					
+					novo_jogo[i][j] = '.';
+			
+			else
+			
+				novo_jogo[i][j] = v[i][j];
+				
+			}
+			
+		}
+		
+	}
+	
+	free(v);
+	return novo_jogo;
+}
+
+
+int main()
+{
+	int linhas, colunas, chance, timer, selecao;
+	
+	printf("Insira a quantidade de linhas desejada: ");
+	scanf("%d", &linhas);
+	
+	printf("Insira a quantidade de colunas desejada: ");
+	scanf("%d", &colunas);
+	
+	printf("Insira, em porcentagem, a probabilidade de uma celula inicializar viva: ");
+	scanf("%d", &chance);
+	
+	char **jogo = begin (linhas, colunas);
+	preenche2d(jogo, linhas, colunas, chance);
+	
+	printf("Jogo criado:\n");
+	imprime2d(jogo, linhas, colunas);
+	
+	printf("Digite '1' para rodar um unico passo, ou digite '2' para rodar indefinidamente.\n");
+	scanf("%d", &selecao);
+	
+	printf("Passo seguinte:\n");
+	
+	while (selecao == 1)
+	{
+		jogo = step(jogo, linhas, colunas);
+		imprime2d(jogo, linhas, colunas);
+		
+		printf("Digite '1' para rodar um unico passo, ou digite '2' para rodar indefinidamente.\n");
+		scanf("%d", &selecao);
+		
+		printf("Passo seguinte:\n");
+	}
+	
+	while (selecao == 2)
+	{
+		timer = 0;
+		jogo = step(jogo, linhas, colunas);
+		
+		imprime2d (jogo, linhas, colunas);
+		
+		while (timer <= 400000000)
+			timer++;
+			
+		printf("Passo seguinte:\n");
+	}
+	
+  	return 0;
+}
+
+
