@@ -7,11 +7,19 @@
 
 ===============
 
-The game is finished. To compile use:
+The game is finished. To compile use on Linux/Windows on Powershell(windows) or Terminal(GNU/Linux):
 
 gcc -Wall main.c -o prg
 
+To run it on GNU/Linux:
+
 ./prog 
+
+On Windows (Powershell):
+
+./prog.exe
+
+
 
 ---------------
 
