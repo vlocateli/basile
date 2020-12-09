@@ -1,4 +1,4 @@
-# Game_of_life 
+# Conway Game of life 
 
 ---------------
 ===============
