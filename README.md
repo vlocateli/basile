@@ -15,6 +15,6 @@ gcc -Wall main.c -o prg
 
 ---------------
 
-
+More about The Game of Life -> https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
 
