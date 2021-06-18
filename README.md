@@ -1,5 +1,5 @@
 # Conway Game of life 
-
+Implementation of Game of Life for university project on Algorithm analisys.
 ---------------
 ===============
 
